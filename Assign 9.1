@@ -1,0 +1,72 @@
+1. What is NOSql database?
+
+A NoSQL database is a non-relational and largely distributed database system that enables rapid, deals with extremely high-volume data which can be structured, semi or even unstructured.
+In general, NoSQL databases have become the first alternative to relational databases, with scalability, availability, and fault tolerance being key deciding factors. 
+NoSQL databases targets large sets of distributed data.
+
+Types of NoSQL Databases
+There are four general types of NoSQL databases, each with their own specific attributes:
+
+1.	Graph database – Based on graph theory, these databases are designed for data whose relations are well represented as a graph and has elements which are interconnected, with an undetermined number of relations between them. Examples include: Neo4j and Titan.
+
+2.	Key-Value store –  These databases are designed for storing data in a schema-less way. In a key-value store, all of the data within consists of an indexed key and a value, hence the name. 
+Example : Cassandra, DyanmoDB, Azure Table Storage (ATS), BerkeleyDB.
+
+3.	Column store / column oriented Database – (also known as wide-column stores) instead of storing data in rows, these databases are designed for storing data tables as sections of columns of data, rather than as rows of data. While this simple description sounds like the inverse of a standard database, wide-column stores offer very high performance and a highly scalable architecture. 
+Examples include: HBase, BigTable and HyperTable.
+
+4.	Document database – expands on the basic idea of key-value stores where “documents” contain more complex in that they contain data and each document is assigned a unique key, which is used to retrieve the document. These are designed for storing, retrieving, and managing document-oriented information, also known as semi-structured data. 
+Examples include: MongoDB and CouchDB.
+
+
+
+============================================================================
+
+2. How does data get stored in NoSQl database?
+	NoSql databases store data in column families as rows that have many columns associated with a row key (Figure 10.1). Column families are groups of related data that is often accessed together. For a Customer, we would often access their Profile information at the same time, but not their Orders.
+Columns are stored one after the other.
+	
+	Main advantage of this is, suppose we have 100 columns and I want to search only 2-3 columns, so instead of searching whole 100 columns as in row based DB, columnar approach reads only what is needed. This saves lot of time and this is very efficient.
+
+
+
+============================================================================
+
+
+
+3.	What is a column family in HBase?
+Column families are the base storage mechanism in HBase.   A HBase table is comprised of one or more column families, each of which is stored in a separate set of region files sharing a common key. A column family is a NoSQL object that contains columns of related data.  It is a tuple (pair) that consists of a key-value pair, where the key is mapped to a value that is a set of columns
+In analogy with relational databases, a column family is as a "table", each key-value pair being a "row"When creating a HBase table, we must define the column families before inserting any data
+
+
+============================================================================
+
+
+5.	How many maximum number of columns can be added to HBase table?
+
+There is no  limit to number of columns in HBase, we can have more than 1 million columns. But its recommended to have column family of 3.
+
+============================================================================
+
+6.	Why columns are not defined at the time of table creation in HBase?
+
+Column families must be declared up front at schema definition time whereas columns do not need to be defined at schema time but can be conjured on the fly while the table is up and running.
+
+============================================================================
+
+7.	How does data get managed in HBase?
+
+One of the important characteristics of HBase is AUTOSHARDING, means that tables are dynamically distributed by the system itself whenever the data grows too large.
+	Let’s say we have region of size 100MB and initially only region will be present.
+So assume that we can store up to 1000 rows into this. If we try to store 10001th row then the table is split into its exactly half and this process continuous. This process is known as AUTOSHARDING in HBase and it is taken care automatically by HMaster.
+
+============================================================================
+
+8.	What happens internally when new data gets inserted into HBase table?
+
+Whenever we are inserting new records into HBase, first it is written into WAL. Although it is not the area where the actual data is stored but it is done due to fault tolerance purpose. So later in case if the system is crashed then HBase has WAL to look into it.
+Once the log entry is done, data to be written is forwarded to Memstore, which is actually a RAM and it is faster than RDBMS.
+This memstore is limited in size. Once it is filled HBase moves this content of Memstore into disk (Hfiles).
+
+
+
